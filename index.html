@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vegas Trip — March 26–29</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: linear-gradient(160deg, #0a0a0f 0%, #0f0d1a 40%, #0a0c0f 100%);
+    min-height: 100vh;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #e8e0d0;
+  }
+  .glow {
+    position: fixed; top: 0; left: 0; right: 0; height: 300px;
+    background: radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.07) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+  header {
+    position: relative; padding: 36px 24px 0;
+    text-align: center; z-index: 1;
+  }
+  .eyebrow {
+    font-size: 11px; letter-spacing: 6px; color: #d4af37;
+    text-transform: uppercase; margin-bottom: 10px;
+  }
+  h1 {
+    font-size: clamp(32px, 9vw, 52px); font-weight: 400; letter-spacing: 4px;
+    background: linear-gradient(135deg, #f5e6c8 0%, #d4af37 50%, #f5e6c8 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; line-height: 1.1; margin-bottom: 6px;
+  }
+  .subtitle { color: #5a5048; font-size: 12px; letter-spacing: 1px; margin-bottom: 24px; }
+  .tabs {
+    display: flex; justify-content: center; gap: 4px;
+    margin-bottom: 0; flex-wrap: wrap; padding: 0 8px;
+  }
+  .tab-btn {
+    padding: 9px 16px; border: 1px solid #2a2520; background: transparent;
+    color: #4a4035; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+    cursor: pointer; border-radius: 2px; font-family: Georgia, serif; transition: all 0.2s;
+    margin-bottom: 4px;
+  }
+  .tab-btn.active {
+    border-color: #d4af37;
+    background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05));
+    color: #d4af37;
+  }
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #d4af37, transparent);
+    margin: 0 24px; opacity: 0.3;
+  }
+  .content {
+    padding: 28px 16px; max-width: 720px;
+    margin: 0 auto; position: relative; z-index: 1;
+  }
+  .section-note {
+    text-align: center; color: #5a5048; font-size: 13px;
+    margin-bottom: 28px; letter-spacing: 1px;
+  }
+
+  /* ── TOP 10 ── */
+  .top10-item {
+    display: flex; gap: 14px; margin-bottom: 14px; padding: 18px;
+    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 4px;
+  }
+  .top10-item.gold {
+    background: linear-gradient(135deg, rgba(212,175,55,0.08), rgba(212,175,55,0.03));
+    border-color: rgba(212,175,55,0.3);
+  }
+  .rank-badge {
+    min-width: 38px; height: 38px; border-radius: 50%;
+    background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: #d4af37; flex-shrink: 0;
+  }
+  .rank-badge.gold {
+    background: linear-gradient(135deg, #d4af37, #8b7520);
+    border-color: #d4af37; color: #0a0a0f; font-size: 15px;
+  }
+  .item-title { font-size: 15px; font-weight: 600; color: #e8e0d0; margin-bottom: 2px; }
+  .item-hotel { font-size: 11px; color: #3a3028; letter-spacing: 1px; margin-left: 8px; }
+  .item-desc { font-size: 13px; color: #7a6e5e; line-height: 1.6; margin-top: 4px; }
+
+  /* ── BY HOTEL ── */
+  .hotel-section-label {
+    font-size: 10px; letter-spacing: 3px; color: #3a3028;
+    text-transform: uppercase; margin: 24px 0 10px 4px;
+  }
+  .hotel-block { margin-bottom: 6px; }
+  .hotel-btn {
+    width: 100%; display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 18px; background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06); border-radius: 4px;
+    cursor: pointer; text-align: left; font-family: Georgia, serif; transition: all 0.2s;
+  }
+  .hotel-btn.open {
+    background: linear-gradient(135deg, rgba(212,175,55,0.08), rgba(212,175,55,0.02));
+    border-color: rgba(212,175,55,0.25); border-radius: 4px 4px 0 0;
+  }
+  .hotel-left { display: flex; align-items: center; gap: 10px; }
+  .hotel-emoji { font-size: 18px; }
+  .hotel-name { font-size: 14px; color: #c8b89a; letter-spacing: 0.5px; }
+  .hotel-btn.open .hotel-name { color: #d4af37; }
+  .hotel-count { font-size: 10px; color: #3a3028; letter-spacing: 1px; }
+  .chevron { color: #4a4035; font-size: 11px; }
+  .hotel-spots {
+    border: 1px solid rgba(212,175,55,0.15); border-top: none;
+    border-radius: 0 0 4px 4px; overflow: hidden; display: none;
+  }
+  .hotel-spots.open { display: block; }
+  .spot-row {
+    padding: 14px 18px; border-top: 1px solid rgba(255,255,255,0.04);
+    background: rgba(255,255,255,0.015);
+  }
+  .spot-row:first-child { border-top: none; }
+  .spot-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 10px; margin-bottom: 5px; flex-wrap: wrap;
+  }
+  .spot-name { font-size: 14px; color: #e0d4c0; font-weight: 600; }
+  .spot-tag {
+    font-size: 10px; padding: 2px 9px; border-radius: 2px;
+    border: 1px solid rgba(212,175,55,0.2); background: rgba(212,175,55,0.08);
+    color: #d4af37; white-space: nowrap; letter-spacing: 0.5px;
+  }
+  .spot-desc { font-size: 13px; color: #6a5e50; line-height: 1.6; }
+  .pro-tips {
+    margin-top: 28px; padding: 18px; border: 1px solid rgba(212,175,55,0.15);
+    border-radius: 4px; background: rgba(212,175,55,0.03);
+    font-size: 12px; color: #6a5e50; line-height: 1.8; letter-spacing: 0.5px;
+  }
+  .pro-tips span { color: #7a6e5e; }
+
+  /* ── MARCH MADNESS ── */
+  .mm-hero {
+    background: linear-gradient(135deg, rgba(212,175,55,0.06), rgba(180,30,30,0.06));
+    border: 1px solid rgba(212,175,55,0.2); border-radius: 4px;
+    padding: 18px; margin-bottom: 24px; text-align: center;
+  }
+  .mm-hero-title { font-size: 11px; letter-spacing: 4px; color: #d4af37; text-transform: uppercase; margin-bottom: 8px; }
+  .mm-hero-text { font-size: 13px; color: #6a5e50; line-height: 1.7; }
+  .mm-card { margin-bottom: 14px; border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.06); }
+  .mm-card-header { padding: 16px 18px 12px; background: rgba(255,255,255,0.025); border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .mm-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+  .mm-card-name { font-size: 15px; color: #e8e0d0; font-weight: 600; }
+  .mm-card-hotel { font-size: 11px; color: #3a3028; letter-spacing: 1px; margin-top: 2px; }
+  .mm-badges { display: flex; gap: 5px; flex-wrap: wrap; }
+  .mm-badge { font-size: 10px; padding: 2px 9px; border-radius: 2px; letter-spacing: 0.5px; white-space: nowrap; border: 1px solid; }
+  .badge-book { background: rgba(212,175,55,0.08); color: #d4af37; border-color: rgba(212,175,55,0.25); }
+  .badge-bar  { background: rgba(139,92,246,0.08); color: #a78bfa; border-color: rgba(139,92,246,0.25); }
+  .badge-elite{ background: rgba(220,38,38,0.10);  color: #f87171; border-color: rgba(220,38,38,0.25); }
+  .badge-size { background: rgba(16,185,129,0.08); color: #6ee7b7; border-color: rgba(16,185,129,0.25); }
+  .badge-vibe { background: rgba(59,130,246,0.08); color: #93c5fd; border-color: rgba(59,130,246,0.25); }
+  .mm-card-desc { font-size: 13px; color: #6a5e50; line-height: 1.65; padding: 12px 18px; background: rgba(255,255,255,0.01); }
+  .mm-stats { display: flex; gap: 0; border-top: 1px solid rgba(255,255,255,0.04); }
+  .mm-stat { flex: 1; padding: 9px 12px; text-align: center; border-right: 1px solid rgba(255,255,255,0.04); }
+  .mm-stat:last-child { border-right: none; }
+  .mm-stat-label { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #3a3028; margin-bottom: 3px; }
+  .mm-stat-value { font-size: 12px; color: #8a7e6e; }
+  .mm-insider { margin-top: 24px; padding: 18px; border: 1px solid rgba(212,175,55,0.15); border-radius: 4px; background: rgba(212,175,55,0.03); }
+  .mm-insider-title { font-size: 10px; letter-spacing: 3px; color: #d4af37; text-transform: uppercase; margin-bottom: 12px; }
+  .mm-tip { display: flex; gap: 10px; margin-bottom: 10px; font-size: 13px; color: #6a5e50; line-height: 1.6; }
+  .mm-tip:last-child { margin-bottom: 0; }
+  .mm-tip-icon { flex-shrink: 0; font-size: 14px; }
+
+  /* ── SCHEDULE ── */
+  .day-block { margin-bottom: 32px; }
+  .day-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 14px; padding-bottom: 10px;
+    border-bottom: 1px solid rgba(212,175,55,0.15);
+  }
+  .day-name { font-size: 18px; color: #d4af37; letter-spacing: 1px; font-weight: 400; }
+  .day-date { font-size: 11px; color: #3a3028; letter-spacing: 2px; text-transform: uppercase; }
+  .sched-item {
+    display: flex; gap: 14px; margin-bottom: 8px;
+    padding: 14px 16px; border-radius: 4px; border: 1px solid;
+  }
+  .sched-item.locked {
+    background: linear-gradient(135deg, rgba(212,175,55,0.07), rgba(212,175,55,0.02));
+    border-color: rgba(212,175,55,0.3);
+  }
+  .sched-item.tentative {
+    background: rgba(255,255,255,0.015);
+    border-color: rgba(255,255,255,0.06);
+    border-style: dashed;
+  }
+  .sched-item.cj {
+    background: rgba(99,102,241,0.05);
+    border-color: rgba(99,102,241,0.2);
+    border-style: dashed;
+  }
+  .sched-time {
+    min-width: 58px; font-size: 12px; color: #5a5048;
+    letter-spacing: 0.5px; padding-top: 1px; flex-shrink: 0;
+    text-align: right;
+  }
+  .sched-item.locked .sched-time { color: #d4af37; }
+  .sched-body { flex: 1; }
+  .sched-title { font-size: 14px; color: #e0d4c0; font-weight: 600; margin-bottom: 3px; }
+  .sched-item.tentative .sched-title { color: #8a7e6e; }
+  .sched-item.cj .sched-title { color: #a5b4fc; }
+  .sched-note { font-size: 12px; color: #5a5048; line-height: 1.55; }
+  .sched-item.locked .sched-note { color: #6a5e50; }
+  .lock-icon { font-size: 11px; margin-right: 4px; }
+  .sched-legend {
+    display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px;
+    padding: 12px 16px; border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 4px; background: rgba(255,255,255,0.01);
+  }
+  .legend-item { display: flex; align-items: center; gap: 7px; font-size: 11px; color: #5a5048; letter-spacing: 0.5px; }
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 2px; border: 1px solid; flex-shrink: 0;
+  }
+  .legend-dot.locked { background: rgba(212,175,55,0.15); border-color: rgba(212,175,55,0.4); }
+  .legend-dot.tentative { background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.15); border-style: dashed; }
+  .legend-dot.cj-dot { background: rgba(99,102,241,0.08); border-color: rgba(99,102,241,0.3); border-style: dashed; }
+  .sched-divider { height: 1px; background: rgba(255,255,255,0.04); margin: 16px 0; }
+  .brunch-note {
+    margin: 6px 0 10px 72px; padding: 10px 14px;
+    background: rgba(212,175,55,0.04); border-left: 2px solid rgba(212,175,55,0.2);
+    border-radius: 0 3px 3px 0; font-size: 12px; color: #5a5048; line-height: 1.6;
+  }
+
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="glow"></div>
+
+<header>
+  <div class="eyebrow">Kevin &amp; Adam · Vegas 2026</div>
+  <h1>THE STRIP</h1>
+  <p class="subtitle">March 26–29 · Staying at Cosmopolitan · Bourbon Forward</p>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('top10',this)">★ Top 10</button>
+    <button class="tab-btn" onclick="switchTab('hotels',this)">By Hotel</button>
+    <button class="tab-btn" onclick="switchTab('madness',this)">🏀 March Madness</button>
+    <button class="tab-btn" onclick="switchTab('schedule',this)">📅 Schedule</button>
+  </div>
+</header>
+
+<div class="divider"></div>
+
+<div class="content">
+
+  <!-- ════════════════ TOP 10 ════════════════ -->
+  <div id="tab-top10">
+    <p class="section-note">The 10 stops your trip cannot miss</p>
+
+    <div class="top10-item gold">
+      <div class="rank-badge gold">1</div>
+      <div>
+        <div class="item-title">🍸 The Chandelier <span class="item-hotel">Cosmopolitan</span></div>
+        <p class="item-desc">Three floors of cocktail theater inside a 65-foot chandelier. Start here — it's literally your hotel. Order the Verbena on Level 2.</p>
+      </div>
+    </div>
+    <div class="top10-item">
+      <div class="rank-badge">2</div>
+      <div>
+        <div class="item-title">⛲ Bellagio Fountains <span class="item-hotel">Bellagio</span></div>
+        <p class="item-desc">Non-negotiable. Watch from the sidewalk or grab a table at Petrossian Bar with a window view. Goes off every 15–30 min at night.</p>
+      </div>
+    </div>
+    <div class="top10-item">
+      <div class="rank-badge">3</div>
+      <div>
+        <div class="item-title">🥃 1923 Prohibition Bar <span class="item-hotel">Venetian</span></div>
+        <p class="item-desc">Purpose-built for whiskey lovers. Serious selection, proper glassware, expert staff. Best dedicated whiskey bar on the strip itself.</p>
+      </div>
+    </div>
+    <div class="top10-item">
+      <div class="rank-badge">4</div>
+      <div>
+        <div class="item-title">☂️ Parasol Up / Parasol Down <span class="item-hotel">Wynn</span></div>
+        <p class="item-desc">Gorgeous lakeside bars inside Wynn. One of the most beautiful casino interiors on earth. Cocktails are exceptional.</p>
+      </div>
+    </div>
+    <div class="top10-item">
+      <div class="rank-badge">5</div>
+      <div>
+        <div class="item-title">🍸 Vesper Bar <span class="item-hotel">Cosmopolitan</span></div>
+        <p class="item-desc">Steps from your room. Named after Bond's cocktail. Dark, moody, intimate — perfect nightcap spot. Don't sleep on this one.</p>
+      </div>
+    </div>
+    <div class="top10-item">
+      <div class="rank-badge">6</div>
+      <div>
+        <div class="item-title">🍕 Secret Pizza <span class="item-hotel">Cosmopolitan</span></div>
+        <p class="item-desc">Floor 3, totally unmarked. Best late-night slice on the strip. A Vegas rite of passage — find it without GPS.</p>
+      </div>
+    </div>
+    <div class="top10-item">
+      <div class="rank-badge">7</div>
+      <div>
+        <div class="item-title">🔐 The Vault <span class="item-hotel">Downtown / Strip</span></div>
+        <p class="item-desc">Vegas's most elaborate speakeasy experience. Hidden entrance, theatrical concept, exceptional cocktails. Already booked for Friday — you're set.</p>
+      </div>
+    </div>
+    <div class="top10-item">
+      <div class="rank-badge">8</div>
+      <div>
+        <div class="item-title">🎵 On The Record <span class="item-hotel">Park MGM</span></div>
+        <p class="item-desc">Speakeasy-style with vinyl rooms, hidden doors, and neon. One of the most creative bar concepts on the strip.</p>
+      </div>
+    </div>
+    <div class="top10-item">
+      <div class="rank-badge">9</div>
+      <div>
+        <div class="item-title">🎩 Petrossian Bar <span class="item-hotel">Bellagio</span></div>
+        <p class="item-desc">The classiest bar on the strip. Fountain views, refined service, excellent bourbon selection. Classic Vegas at its best.</p>
+      </div>
+    </div>
+    <div class="top10-item">
+      <div class="rank-badge">10</div>
+      <div>
+        <div class="item-title">🏙️ El Cortez <span class="item-hotel">Fremont Street</span></div>
+        <p class="item-desc">The oldest original casino in Vegas, untouched and perfect. Penny slots, cheap tables, zero pretension, maximum authenticity. A required Fremont pilgrimage.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════ BY HOTEL ════════════════ -->
+  <div id="tab-hotels" class="hidden">
+    <p class="section-note">South to North, then Fremont · Tap any property to expand</p>
+    <div id="hotels-list"></div>
+    <div class="pro-tips">
+      💡 <span>PRO TIPS:</span> Walk the strip north on one side, south on the other. Use rideshare between Mandalay Bay and the main strip cluster. Wynn/Encore are a longer haul north — worth it. Fremont is a 10-min Uber from mid-strip and a completely different vibe — plan one dedicated night.
+    </div>
+  </div>
+
+  <!-- ════════════════ MARCH MADNESS ════════════════ -->
+  <div id="tab-madness" class="hidden">
+    <div class="mm-hero">
+      <div class="mm-hero-title">🏀 March Madness in Vegas</div>
+      <p class="mm-hero-text">There is no better place on earth to watch the tournament. Every sportsbook goes wall-to-wall. You'll be there for the Sweet 16 weekend — one of the best windows of the whole tournament. Ranked best to solid backup.</p>
+    </div>
+    <div id="madness-list"></div>
+    <div class="mm-insider">
+      <div class="mm-insider-title">Insider Playbook</div>
+      <div class="mm-tip"><span class="mm-tip-icon">⏰</span><span><strong style="color:#8a7e6e">Arrive early on game days.</strong> Best seats at Circa, Westgate, and Caesars fill fast during Sweet 16. Get there 30–45 min before tip or you're standing.</span></div>
+      <div class="mm-tip"><span class="mm-tip-icon">📱</span><span><strong style="color:#8a7e6e">Fund your betting app before you go.</strong> FanDuel, DraftKings, and BetMGM all have Nevada mobile apps. Have your account loaded so you're not at a kiosk while games tip off.</span></div>
+      <div class="mm-tip"><span class="mm-tip-icon">🥃</span><span><strong style="color:#8a7e6e">Bourbon + sportsbook = the move.</strong> Most major books have full bar service. Order a Blanton's or Weller and settle in. You're in Vegas — don't drink light beer and watch on a 32-inch TV like you're home.</span></div>
+      <div class="mm-tip"><span class="mm-tip-icon">🍺</span><span><strong style="color:#8a7e6e">Beer Park at Paris</strong> is a solid casual option right on the strip — rooftop patio, cold beers, fountain views, every game on screen. Good afternoon spot between serious sessions.</span></div>
+      <div class="mm-tip"><span class="mm-tip-icon">🚗</span><span><strong style="color:#8a7e6e">Circa is worth the Uber.</strong> Off-strip in Downtown Vegas, but Stadium Swim is the single greatest March Madness venue in the world. Make the trip at least once — maybe pair it with a Fremont night.</span></div>
+    </div>
+  </div>
+
+  <!-- ════════════════ SCHEDULE ════════════════ -->
+  <div id="tab-schedule" class="hidden">
+
+    <div class="sched-legend">
+      <div class="legend-item"><div class="legend-dot locked"></div> Confirmed / Booked</div>
+      <div class="legend-item"><div class="legend-dot tentative"></div> Tentative / Options</div>
+      <div class="legend-item"><div class="legend-dot cj-dot"></div> CJ Link-Up</div>
+    </div>
+
+    <!-- THURSDAY -->
+    <div class="day-block">
+      <div class="day-header">
+        <div class="day-name">Thursday</div>
+        <div class="day-date">March 26</div>
+      </div>
+
+      <div class="sched-item locked">
+        <div class="sched-time">12:15 PM</div>
+        <div class="sched-body">
+          <div class="sched-title">✈️ Kevin lands — Harry Reid International</div>
+          <div class="sched-note">Grab rideshare to Cosmo. Check-in, acquire supplies, get your bearings.</div>
+        </div>
+      </div>
+
+      <div class="sched-item locked">
+        <div class="sched-time">3:45 PM</div>
+        <div class="sched-body">
+          <div class="sched-title">✈️ Adam lands — Harry Reid International</div>
+          <div class="sched-note">Rideshare to Cosmo. Reunite, drop bags, reset.</div>
+        </div>
+      </div>
+
+      <div class="sched-divider"></div>
+
+      <div class="sched-item tentative">
+        <div class="sched-time">~5:00 PM</div>
+        <div class="sched-body">
+          <div class="sched-title">💭 First stop: The Chandelier</div>
+          <div class="sched-note">Your hotel. Level 2. Order the Verbena. Classic opener.</div>
+        </div>
+      </div>
+
+      <div class="sched-item tentative">
+        <div class="sched-time">~6:30 PM</div>
+        <div class="sched-body">
+          <div class="sched-title">💭 Dinner at Cosmo</div>
+          <div class="sched-note">Options: Momofuku (pork buns, ramen, duck — strong first-night pick) · Scarpetta · Beauty &amp; Essex</div>
+        </div>
+      </div>
+
+      <div class="sched-item tentative">
+        <div class="sched-time">~9:00 PM</div>
+        <div class="sched-body">
+          <div class="sched-title">💭 Casino floor + light gambling</div>
+          <div class="sched-note">Cosmo casino, then maybe a northern strip walk toward Bellagio / Caesars. Early night — golf is tomorrow morning.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FRIDAY -->
+    <div class="day-block">
+      <div class="day-header">
+        <div class="day-name">Friday</div>
+        <div class="day-date">March 27</div>
+      </div>
+
+      <div class="sched-item tentative">
+        <div class="sched-time">~7:30 AM</div>
+        <div class="sched-body">
+          <div class="sched-title">💭 Breakfast</div>
+          <div class="sched-note">Eggslut or The Henry at Cosmo · OR grab something at the course — Rat Pack Bar at LV National is a solid option</div>
+        </div>
+      </div>
+
+      <div class="sched-item locked">
+        <div class="sched-time">9:30 AM</div>
+        <div class="sched-body">
+          <div class="sched-title">⛳ Golf — Las Vegas National Golf Club</div>
+          <div class="sched-note">🔒 Booked · With club rental · Classic Rat Pack-era course · Allow ~4.5 hrs</div>
+        </div>
+      </div>
+
+      <div class="sched-item tentative">
+        <div class="sched-time">~2:30 PM</div>
+        <div class="sched-body">
+          <div class="sched-title">💭 Return to Cosmo — pool / sportsbook / nap</div>
+          <div class="sched-note">Recharge window. March Madness games will be running — Cosmo sportsbook is steps away.</div>
+        </div>
+      </div>
+
+      <div class="sched-divider"></div>
+
+      <div class="sched-item locked">
+        <div class="sched-time">6:00 PM</div>
+        <div class="sched-body">
+          <div class="sched-title">🔒 The Vault — Speakeasy</div>
+          <div class="sched-note">Booked · Vegas's most elaborate hidden bar experience · Confirm exact address/entrance details before you go</div>
+        </div>
+      </div>
+
+      <div class="sched-item locked">
+        <div class="sched-time">7:00 PM</div>
+        <div class="sched-body">
+          <div class="sched-title">🔒 Dinner — Spago</div>
+          <div class="sched-note">Booked · Wolfgang Puck's flagship at Bellagio · Upscale, fountain views available</div>
+        </div>
+      </div>
+
+      <div class="sched-item tentative">
+        <div class="sched-time">~9:30 PM</div>
+        <div class="sched-body">
+          <div class="sched-title">💭 Post-dinner strip walk — Bourbon crawl</div>
+          <div class="sched-note">Suggested route: Bellagio → Petrossian Bar → Caesars casino floor → Venetian → 1923 Prohibition Bar · The Barbershop at Cosmo for a nightcap</div>
+        </div>
+      </div>
+
+      <div class="sched-item tentative">
+        <div class="sched-time">Late Night</div>
+        <div class="sched-body">
+          <div class="sched-title">💭 Option: Fremont Street + El Cortez</div>
+          <div class="sched-note">10-min Uber. Old Vegas energy, cheap tables, El Cortez is a must for Adam. Pair with a stop at Commonwealth rooftop bar.</div>
+        </div>
+      </div>
+
+      <div class="sched-item cj">
+        <div class="sched-time">Friday</div>
+        <div class="sched-body">
+          <div class="sched-title">CJ arrives late Thursday · Friday: Lazy River, Strip, Tiki Bar, Fremont</div>
+          <div class="sched-note" style="color:#6366f1aa">CJ is at MGM Grand. Potential Fremont overlap Friday night if timing works.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SATURDAY -->
+    <div class="day-block">
+      <div class="day-header">
+        <div class="day-name">Saturday</div>
+        <div class="day-date">March 28</div>
+      </div>
+
+      <div class="sched-item tentative">
+        <div class="sched-time">~10:00 AM</div>
+        <div class="sched-body">
+          <div class="sched-title">💭 Brunch — open options</div>
+          <div class="sched-note">Wicked Spoon (Cosmopolitan buffet — note: prepay required, no cancellation) · Mon Ami Gabi at Paris (outdoor patio, fountain views, great vibe) · Bouchon at Venetian (classic French bistro brunch) · The Henry at Cosmo (reliable, easy)</div>
+        </div>
+      </div>
+
+      <div class="sched-item tentative">
+        <div class="sched-time">~12:30 PM</div>
+        <div class="sched-body">
+          <div class="sched-title">💭 Off-roading — Red Rock Canyon or Lava Butte Loop</div>
+          <div class="sched-note">Jeep Wrangler is ready. Red Rock requires advance reservation. Lava Butte Loop is open access and well-rated on OnX. Allow 3–4 hrs round trip.</div>
+        </div>
+      </div>
+
+      <div class="sched-item tentative">
+        <div class="sched-time">~4:30 PM</div>
+        <div class="sched-body">
+          <div class="sched-title">💭 Return, clean up, March Madness games</div>
+          <div class="sched-note">Sweet 16 Saturday — Elite 8 games will be running. Wynn Sports Bar or Caesars Race &amp; Sports if you want a proper sportsbook setting before dinner.</div>
+        </div>
+      </div>
+
+      <div class="sched-item locked">
+        <div class="sched-time">6:00 PM</div>
+        <div class="sched-body">
+          <div class="sched-title">🔒 Dinner — Momofuku</div>
+          <div class="sched-note">Booked · David Chang's flagship — pork buns, ramen, duck, strong cocktail program · Cosmopolitan</div>
+        </div>
+      </div>
+
+      <div class="sched-item tentative">
+        <div class="sched-time">~8:30 PM</div>
+        <div class="sched-body">
+          <div class="sched-title">💭 Late night strip &amp; speakeasy crawl</div>
+          <div class="sched-note">Options: The Lock at Horseshoe · The Count Room at Flamingo · Ghost Donkey at Cosmo · Barbershop at Cosmo</div>
+        </div>
+      </div>
+
+      <div class="sched-item cj">
+        <div class="sched-time">Late Night</div>
+        <div class="sched-body">
+          <div class="sched-title">CJ link-up — Rio Rooftop Bar</div>
+          <div class="sched-note" style="color:#6366f1aa">CJ is planning Rio Rooftop on Saturday. Short Uber off-strip. Good meetup point — coordinate with him on timing.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUNDAY -->
+    <div class="day-block">
+      <div class="day-header">
+        <div class="day-name">Sunday</div>
+        <div class="day-date">March 29</div>
+      </div>
+
+      <div class="sched-item tentative">
+        <div class="sched-time">Morning</div>
+        <div class="sched-body">
+          <div class="sched-title">💭 Final casino laps + coffee</div>
+          <div class="sched-note">Eggslut or The Henry for a quick breakfast. Last spin through Cosmo casino floor.</div>
+        </div>
+      </div>
+
+      <div class="sched-item locked">
+        <div class="sched-time">11:00 AM</div>
+        <div class="sched-body">
+          <div class="sched-title">🔒 Return Jeep — Avis</div>
+          <div class="sched-note">Drop-off by 11:00 AM</div>
+        </div>
+      </div>
+
+      <div class="sched-item locked">
+        <div class="sched-time">1:30 PM</div>
+        <div class="sched-body">
+          <div class="sched-title">✈️ Kevin departs — Harry Reid International</div>
+          <div class="sched-note">Leave hotel by ~11:30 AM to be safe</div>
+        </div>
+      </div>
+
+      <div class="sched-item locked">
+        <div class="sched-time">4:47 PM</div>
+        <div class="sched-body">
+          <div class="sched-title">✈️ Adam departs — Harry Reid International</div>
+          <div class="sched-note">Plenty of time — one more meal, final walk, or airport lounge</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /tab-schedule -->
+
+</div><!-- /content -->
+
+<script>
+const hotels = [
+  {
+    name: "Mandalay Bay / Delano", emoji: "🌴",
+    spots: [
+      { name: "1923 Bourbon Bar", type: "Bourbon Bar 🥃", desc: "Dedicated bourbon and American whiskey bar. Named for the year Prohibition ended. Serious selection, proper glassware, knowledgeable staff. Worth the Uber south." },
+      { name: "Skyfall Lounge", type: "Rooftop Bar 🌅", desc: "64th floor of the Delano tower. Best unobstructed strip views in Vegas. Arrive before sunset — it earns the trip." },
+      { name: "Foundation Room", type: "Bar / Club 🎶", desc: "House of Blues rooftop venue. Eclectic decor, good cocktails, great city views. Check schedule — not always open." }
+    ]
+  },
+  {
+    name: "MGM Grand", emoji: "🦁",
+    spots: [
+      { name: "Whiskey Down", type: "Bourbon Bar 🥃", desc: "Retro cocktail lounge with a serious American whiskey and bourbon program. Great for an unhurried pour, solid staff." },
+      { name: "BetMGM Sports Lounge", type: "Sportsbook 🏀", desc: "Spacious and comfortable sportsbook. Integrates with the BetMGM app seamlessly. Steps from Whiskey Down — combine the two on a game day." }
+    ]
+  },
+  {
+    name: "New York-New York", emoji: "🗽",
+    spots: [
+      { name: "Bar at Times Square", type: "Bar 🎹", desc: "Dueling pianos nightly. Rowdy, fun, zero pretension. Great palette cleanser between upscale stops." },
+      { name: "Nine Fine Irishmen", type: "Irish Pub 🍺", desc: "Authentic imported Irish pub. Solid whiskey selection, live music most nights." }
+    ]
+  },
+  {
+    name: "Park MGM", emoji: "🌿",
+    spots: [
+      { name: "On The Record", type: "Speakeasy 🎵", desc: "Hidden speakeasy with vinyl rooms, neon, and craft cocktails. One of the most creative bar concepts on the strip. Pairs well with a Cosmo night." },
+      { name: "Juniper Cocktail Lounge", type: "Bar 🍸", desc: "Intimate, beautifully designed. Quieter crowd, excellent cocktails. Good for real conversation." }
+    ]
+  },
+  {
+    name: "Aria", emoji: "🔷",
+    spots: [
+      { name: "Alibi Cocktail Lounge", type: "Bar 🍸", desc: "Sophisticated open bar inside Aria's casino floor. Premium spirits, well-crafted cocktails. Surprisingly uncrowded for a casino bar." },
+      { name: "Lobby Bar", type: "Bar 🥂", desc: "One of the most beautiful lobbies on the strip. Good for a quiet pour and people-watching." }
+    ]
+  },
+  {
+    name: "Bellagio", emoji: "⛲",
+    spots: [
+      { name: "Petrossian Bar", type: "Bar 🎩", desc: "The classiest bar on the strip. Direct fountain views, refined service, excellent bourbon selection. Classic Vegas." },
+      { name: "Bellagio Fountains", type: "Must-See 🌊", desc: "Every 15–30 min at night. Watch from the sidewalk or from inside Petrossian. Non-negotiable." },
+      { name: "Conservatory & Botanical Gardens", type: "Must-See 🌸", desc: "Free, always open, seasonally themed. Genuinely stunning and a great between-bar palate cleanser." },
+      { name: "Spago", type: "Restaurant 🍽️", desc: "Wolfgang Puck's flagship. Booked for Friday 7:00 PM. Fountain-adjacent, upscale, excellent cocktails to start." }
+    ]
+  },
+  {
+    name: "Cosmopolitan", emoji: "✨",
+    spots: [
+      { name: "The Chandelier — Level 2", type: "Bar ⭐", desc: "The sweet spot. Order the Verbena. Iconic Vegas cocktail experience — start and end here often." },
+      { name: "The Chandelier — Level 1 & 3", type: "Bar 🍸", desc: "Level 1 is walk-through on the casino floor. Level 3 is the quietest and most intimate. Worth seeing all three." },
+      { name: "Vesper Bar", type: "Bar 🕵️", desc: "Bond-themed, dark, moody, intimate. Perfect nightcap steps from your elevator." },
+      { name: "The Barbershop", type: "Speakeasy 🎶", desc: "Hidden entrance through an actual barbershop. Live music, whiskey-forward cocktails, unique Vegas experience." },
+      { name: "Ghost Donkey", type: "Bar 🌮", desc: "Mezcal and tequila bar tucked into the casino. Compact, fun, great cocktails. Good between-stop drink." },
+      { name: "The Ski Lodge", type: "Bar ⛷️", desc: "Cozy, kitschy ski-chalet themed bar. Surprisingly good whiskey cocktails. Underrated Cosmo gem." },
+      { name: "Secret Pizza", type: "Hidden Gem 🍕", desc: "Unmarked on Floor 3. Find it without GPS. Best late-night slice on the strip — a Vegas rite of passage." }
+    ]
+  },
+  {
+    name: "Planet Hollywood", emoji: "🎬",
+    spots: [
+      { name: "Speakeasy at Caramella's", type: "Speakeasy 🔐", desc: "Hidden speakeasy inside Planet Hollywood. Lower profile than The Vault or The Lock, but worth a stop on a speakeasy crawl night." }
+    ]
+  },
+  {
+    name: "Paris Las Vegas", emoji: "🗼",
+    spots: [
+      { name: "Mon Ami Gabi", type: "Bar / Restaurant 🥂", desc: "Sidewalk patio with direct Bellagio fountain views. Best outdoor strip seating in Vegas. Strong brunch option Saturday." },
+      { name: "Chateau Rooftop", type: "Rooftop Bar 🌆", desc: "At the base of the Eiffel Tower replica. Great views and atmosphere at night." },
+      { name: "Beer Park", type: "Sports Bar 🍺", desc: "Rooftop beer garden with every game on screen. Casual, fun, fountain adjacent. Great March Madness afternoon spot." }
+    ]
+  },
+  {
+    name: "Flamingo / Horseshoe", emoji: "🦩",
+    spots: [
+      { name: "The Count Room", type: "Speakeasy 🔐", desc: "Hidden speakeasy inside the Flamingo. Intimate, well-executed, strong cocktail program. Pair with The Lock on a dedicated speakeasy night." },
+      { name: "The Lock Speakeasy", type: "Speakeasy 🔒", desc: "Hidden inside Horseshoe Las Vegas (former Bally's, next to Flamingo). One of the better speakeasy concepts on the strip. Reserve ahead." },
+      { name: "The Cabinet of Curiosities", type: "Bar 🎪", desc: "Adjoining bar concept to The Lock at Horseshoe. Quirky, theatrical, worth exploring alongside The Lock." }
+    ]
+  },
+  {
+    name: "Harrah's", emoji: "🎪",
+    spots: [
+      { name: "Carnaval Court", type: "Outdoor Bar 🎶", desc: "Open-air bar on the strip sidewalk. Flair bartenders, live music, energetic crowd. Great for a mid-walk stop — zero pretension." },
+      { name: "Piano Bar", type: "Bar 🎹", desc: "Harrah's dueling piano bar. Similar vibe to Times Square Bar at NYNY but slightly more intimate. Lively on weekends." }
+    ]
+  },
+  {
+    name: "Caesars Palace", emoji: "🏛️",
+    spots: [
+      { name: "Caesars Race & Sports Book", type: "Sportsbook 🏀", desc: "Best on-strip sportsbook. VIP seating pods, massive screens, full bar and food service. The March Madness move if you're staying on the strip." },
+      { name: "Montecristo Cigar Bar", type: "Cigar Bar 🥃", desc: "Full cigar lounge with a deep bourbon and whiskey selection. If you're smokers, this is the one. Even if not, worth a look." },
+      { name: "Gordon Ramsay Pub & Grill", type: "Pub 🍺", desc: "Lively British pub with an extensive whiskey and bourbon list. Solid cocktail program, good energy." },
+      { name: "Forum Shops", type: "Must-See 🛍️", desc: "The fake sky ceiling that transitions day to night. Animatronic shows. Peak Vegas kitsch done at maximum scale." }
+    ]
+  },
+  {
+    name: "The Venetian / Palazzo", emoji: "🎭",
+    spots: [
+      { name: "1923 Prohibition Bar", type: "Bourbon Bar 🥃", desc: "The best dedicated whiskey bar on the strip. Named for Prohibition's end. Deep bourbon program, serious staff, beautiful space. Do not miss." },
+      { name: "Rosina Bar", type: "Bar 🍸", desc: "Intimate, hidden cocktail bar inside the Venetian. One of the most underrated bars on the strip. Exceptional craft program." },
+      { name: "Golden Gai Cocktail Club", type: "Bar 🏮", desc: "Japanese-inspired intimate cocktail club. Tokyo alley aesthetic, creative drinks, unique atmosphere on the strip." },
+      { name: "Juliet Cocktail Room", type: "Bar 🌹", desc: "Elegant, intimate cocktail lounge inside the Venetian. Sophisticated crowd, beautiful room, strong cocktail menu." },
+      { name: "Lagasse's Stadium", type: "Sports Bar 🏀", desc: "Emeril's sports bar concept. 100+ screens, outstanding food for a sports bar, private VIP suites available for rent during March Madness." },
+      { name: "Grand Canal / St. Mark's Square", type: "Must-See 🛶", desc: "Indoor canals with gondola rides and a painted sky ceiling. Ridiculous and magnificent — a Vegas must-see absurdity." }
+    ]
+  },
+  {
+    name: "Hard Rock (formerly Mirage)", emoji: "🎸",
+    spots: [
+      { name: "Center Bar", type: "Bar 🎸", desc: "Main casino floor bar. Rock memorabilia everywhere, solid drinks, lively crowd after the rebrand." }
+    ]
+  },
+  {
+    name: "LINQ", emoji: "🎡",
+    spots: [
+      { name: "High Roller Observation Wheel", type: "Must-Do 🎡", desc: "Book the open bar gondola. 30 min, 550 feet, full strip panorama. Surprisingly good time — do it at night." },
+      { name: "LINQ Promenade", type: "Bar District 🍹", desc: "Outdoor pedestrian bar district. Multiple bars, casual food, great energy. Good midday or early evening stop." }
+    ]
+  },
+  {
+    name: "Wynn / Encore", emoji: "💎",
+    spots: [
+      { name: "Parasol Up", type: "Bar ☂️", desc: "Overlooks the Wynn's indoor lake and waterfall. Stunning interior — one of the most beautiful bar settings in America." },
+      { name: "Parasol Down", type: "Bar ☂️", desc: "Lakeside level, same lakefront beauty, more intimate. Steps from Parasol Up — go to both." },
+      { name: "Overlook Lounge", type: "Bar 🌿", desc: "Wynn's garden bar. Quieter, refined, green backdrop. Perfect for bourbon in a calm, beautiful setting." },
+      { name: "Wynn Sports Bar", type: "Sports Bar 🏀", desc: "Luxury March Madness viewing. Floor-to-ceiling screens, plush seating, exceptional cocktails. Best setting if you want to watch games in style." },
+      { name: "Wynn / Encore Casino Floor", type: "Gambling 🎲", desc: "The best casino floors on the strip. Best odds, best service, most beautiful space. Spend the most time gambling here." }
+    ]
+  },
+  {
+    name: "⚡ Fremont Street", emoji: "🌆",
+    spots: [
+      { name: "El Cortez", type: "Classic Casino 🎰", desc: "The oldest continuously operating casino in Las Vegas, opened 1941. Untouched, authentic, zero pretension. Penny slots, cheap blackjack tables, original neon. Adam's must-do — and rightfully so. This is old Vegas in its purest form." },
+      { name: "Fremont Street Experience", type: "Must-See 💡", desc: "The 1,500-foot LED canopy covering four city blocks. Free light shows running constantly overhead. The center of Fremont's energy — you can't miss it." },
+      { name: "Commonwealth", type: "Bar / Rooftop 🍸", desc: "Craft cocktail bar with a rooftop patio overlooking the Fremont action. One of the more sophisticated spots downtown. Hidden back bar inside too." },
+      { name: "Golden Nugget", type: "Casino / Bar 🦈", desc: "The crown jewel of Fremont casinos. The outdoor pool has a literal shark tank slide through it. Worth walking through for the spectacle alone." },
+      { name: "Double Down Saloon", type: "Dive Bar 🎸", desc: "Off Fremont a bit but legendary. Cash only, no natural light, punk rock jukebox, $3 beers. Total dirtbag bar in the best possible way. If you're up late, make the trip." }
+    ]
+  }
+];
+
+const madness = [
+  {
+    name: "Stadium Swim", hotel: "Circa Resort — Downtown Las Vegas",
+    badges: [{label:"🏆 Best in Vegas",cls:"badge-elite"},{label:"Sportsbook",cls:"badge-book"},{label:"Pool Bar",cls:"badge-bar"}],
+    desc: "The crown jewel. Adults-only pool amphitheater with a 143-foot screen — the largest sportsbook display in the world. Watch games from the pool or poolside loungers with full bar service. Nothing like this exists anywhere else. Technically off-strip in Downtown, but it's worth every minute of the Uber. Pair with Fremont Street for a full night out.",
+    stats:[{label:"Screen",value:"143 ft"},{label:"Vibe",value:"Electric"},{label:"Dress",value:"Pool attire"},{label:"Reserve",value:"Recommended"}]
+  },
+  {
+    name: "Westgate SuperBook", hotel: "Westgate Las Vegas",
+    badges: [{label:"Sportsbook",cls:"badge-book"},{label:"Historic",cls:"badge-elite"},{label:"Massive",cls:"badge-size"}],
+    desc: "The OG of Vegas sportsbooks. 30,000 sq ft, 350 seats, a 220-foot screen wall. This is where serious bettors have come for decades. A few blocks off-strip — rideshare over. The energy during March Madness is unmatched for pure sportsbook atmosphere.",
+    stats:[{label:"Size",value:"30,000 sq ft"},{label:"Seats",value:"350+"},{label:"Screen",value:"220 ft wall"},{label:"Vibe",value:"Serious bettor"}]
+  },
+  {
+    name: "Caesars Race & Sports Book", hotel: "Caesars Palace",
+    badges: [{label:"Sportsbook",cls:"badge-book"},{label:"On-Strip",cls:"badge-size"},{label:"Premium",cls:"badge-elite"}],
+    desc: "Best on-strip sportsbook. Massive screens, VIP seating pods you can reserve, full bar and food service. Caesars crowd during tournament time is unbeatable. Pair with Montecristo Cigar Bar or the Lobby Bar for a full Caesars night.",
+    stats:[{label:"Location",value:"On-Strip"},{label:"Seating",value:"VIP pods"},{label:"Food",value:"Full service"},{label:"Vibe",value:"Upscale crowd"}]
+  },
+  {
+    name: "BetMGM Sports Lounge", hotel: "MGM Grand",
+    badges: [{label:"Sportsbook",cls:"badge-book"},{label:"Bar",cls:"badge-bar"},{label:"On-Strip",cls:"badge-size"}],
+    desc: "Spacious and comfortable. Great sightlines, multiple bars built in, BetMGM app integration is seamless. Whiskey Down is literally steps away — combine them. A very natural pairing on a game day.",
+    stats:[{label:"Location",value:"On-Strip"},{label:"App",value:"BetMGM native"},{label:"Food",value:"Full service"},{label:"Vibe",value:"Lively, comfortable"}]
+  },
+  {
+    name: "Wynn Sports Bar", hotel: "Wynn Las Vegas",
+    badges: [{label:"Sports Bar",cls:"badge-bar"},{label:"Premium",cls:"badge-elite"},{label:"On-Strip",cls:"badge-size"}],
+    desc: "Exactly what you'd expect from Wynn — floor-to-ceiling screens, plush seating, and exceptional cocktails. Best setting if you want to watch games in actual luxury with a proper bourbon. Quieter crowd than Caesars but equal quality.",
+    stats:[{label:"Location",value:"On-Strip (north)"},{label:"Dress",value:"Smart casual"},{label:"Cocktails",value:"Exceptional"},{label:"Vibe",value:"Luxury sports"}]
+  },
+  {
+    name: "Beer Park", hotel: "Paris Las Vegas",
+    badges: [{label:"Sports Bar",cls:"badge-bar"},{label:"Rooftop",cls:"badge-vibe"},{label:"On-Strip",cls:"badge-size"}],
+    desc: "Rooftop beer garden right on the strip with Bellagio fountain views and every game running. Casual, fun, and perfectly located for a mid-afternoon game-watching session between other activities. Low commitment, high fun.",
+    stats:[{label:"Location",value:"On-Strip"},{label:"Setting",value:"Rooftop patio"},{label:"Food",value:"Bar fare"},{label:"Vibe",value:"Casual, fun"}]
+  },
+  {
+    name: "Cosmo Sportsbook", hotel: "Cosmopolitan — Your Hotel",
+    badges: [{label:"Sportsbook",cls:"badge-book"},{label:"Your Hotel",cls:"badge-elite"},{label:"On-Strip",cls:"badge-size"}],
+    desc: "Your home base. Not the largest or most electric book in Vegas, but it's Cosmo — so the design is slick, the cocktails are excellent, and you can be in your room in 5 minutes. Best used for quick bets, live action monitoring, or when you want games on without leaving the building.",
+    stats:[{label:"Location",value:"Your hotel"},{label:"Convenience",value:"★★★★★"},{label:"Size",value:"Medium"},{label:"Vibe",value:"Stylish, chill"}]
+  }
+];
+
+function buildHotels() {
+  const container = document.getElementById('hotels-list');
+  hotels.forEach((hotel) => {
+    const block = document.createElement('div');
+    block.className = 'hotel-block';
+
+    const btn = document.createElement('button');
+    btn.className = 'hotel-btn';
+    btn.innerHTML = `
+      <div class="hotel-left">
+        <span class="hotel-emoji">${hotel.emoji}</span>
+        <span class="hotel-name">${hotel.name}</span>
+        <span class="hotel-count">${hotel.spots.length} stop${hotel.spots.length > 1 ? 's' : ''}</span>
+      </div>
+      <span class="chevron">▼</span>
+    `;
+
+    const spotsDiv = document.createElement('div');
+    spotsDiv.className = 'hotel-spots';
+
+    hotel.spots.forEach(spot => {
+      const row = document.createElement('div');
+      row.className = 'spot-row';
+      row.innerHTML = `
+        <div class="spot-header">
+          <span class="spot-name">${spot.name}</span>
+          <span class="spot-tag">${spot.type}</span>
+        </div>
+        <p class="spot-desc">${spot.desc}</p>
+      `;
+      spotsDiv.appendChild(row);
+    });
+
+    btn.addEventListener('click', () => {
+      const isOpen = spotsDiv.classList.contains('open');
+      document.querySelectorAll('.hotel-spots.open').forEach(el => el.classList.remove('open'));
+      document.querySelectorAll('.hotel-btn.open').forEach(el => el.classList.remove('open'));
+      if (!isOpen) { spotsDiv.classList.add('open'); btn.classList.add('open'); }
+    });
+
+    block.appendChild(btn);
+    block.appendChild(spotsDiv);
+    container.appendChild(block);
+  });
+}
+
+function buildMadness() {
+  const container = document.getElementById('madness-list');
+  madness.forEach((item, i) => {
+    const card = document.createElement('div');
+    card.className = 'mm-card';
+    const badgeHTML = item.badges.map(b => `<span class="mm-badge ${b.cls}">${b.label}</span>`).join('');
+    const statHTML = item.stats.map(s => `<div class="mm-stat"><div class="mm-stat-label">${s.label}</div><div class="mm-stat-value">${s.value}</div></div>`).join('');
+    card.innerHTML = `
+      <div class="mm-card-header">
+        <div class="mm-card-top">
+          <div>
+            <div class="mm-card-name">${i === 0 ? '🏆 ' : ''}${item.name}</div>
+            <div class="mm-card-hotel">${item.hotel}</div>
+          </div>
+          <div class="mm-badges">${badgeHTML}</div>
+        </div>
+      </div>
+      <div class="mm-card-desc">${item.desc}</div>
+      <div class="mm-stats">${statHTML}</div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function switchTab(tab, btnEl) {
+  ['top10','hotels','madness','schedule'].forEach(t => {
+    document.getElementById('tab-' + t).classList.add('hidden');
+  });
+  document.getElementById('tab-' + tab).classList.remove('hidden');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btnEl.classList.add('active');
+}
+
+buildHotels();
+buildMadness();
+</script>
+</body>
+</html>
