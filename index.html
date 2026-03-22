@@ -128,6 +128,12 @@
     color: #d4af37; white-space: nowrap; letter-spacing: 0.5px;
   }
   .spot-desc { font-size: 13px; color: #6a5e50; line-height: 1.6; }
+  .hotel-map-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .hotel-map-link {
+    font-size: 12px; color: #d4af37; text-decoration: none; letter-spacing: 0.5px;
+    padding: 2px 0; border-bottom: 1px solid rgba(212,175,55,0.25); transition: all 0.2s;
+  }
+  .hotel-map-link:hover { color: #e8c84a; border-bottom-color: rgba(232,200,74,0.5); }
   .pro-tips {
     margin-top: 28px; padding: 18px; border: 1px solid rgba(212,175,55,0.15);
     border-radius: 4px; background: rgba(212,175,55,0.03);
@@ -587,7 +593,7 @@
 <script>
 const hotels = [
   {
-    name: "⚡ Fremont Street", emoji: "🌆",
+    name: "⚡ Fremont Street", emoji: "🌆", mapUrls: [],
     spots: [
       { name: "El Cortez", type: "Classic Casino 🎰", desc: "The oldest continuously operating casino in Las Vegas, opened 1941. Untouched, authentic, zero pretension. Penny slots, cheap blackjack tables, original neon. Adam's must-do — and rightfully so. This is old Vegas in its purest form." },
       { name: "Fremont Street Experience", type: "Must-See 💡", desc: "The 1,500-foot LED canopy covering four city blocks. Free light shows running constantly overhead. The center of Fremont's energy — you can't miss it." },
@@ -598,6 +604,7 @@ const hotels = [
   },
   {
     name: "Wynn / Encore", emoji: "💎",
+    mapUrls: [{ label: "🗺️ Hotel Map", url: "https://www.smartervegas.com/images/resortmaps/237.jpg" }],
     spots: [
       { name: "Parasol Up", type: "Bar ☂️", desc: "Overlooks the Wynn's indoor lake and waterfall. Stunning interior — one of the most beautiful bar settings in America." },
       { name: "Parasol Down", type: "Bar ☂️", desc: "Lakeside level, same lakefront beauty, more intimate. Steps from Parasol Up — go to both." },
@@ -608,12 +615,14 @@ const hotels = [
   },
   {
     name: "Hard Rock (formerly Mirage)", emoji: "🎸",
+    mapUrls: [{ label: "🗺️ Hotel Map", url: "https://www.smartervegas.com/images/resortmaps/223.jpg" }],
     spots: [
       { name: "Center Bar", type: "Bar 🎸", desc: "Main casino floor bar. Rock memorabilia everywhere, solid drinks, lively crowd after the rebrand." }
     ]
   },
   {
     name: "The Venetian / Palazzo", emoji: "🎭",
+    mapUrls: [{ label: "🗺️ Hotel Map", url: "https://www.smartervegas.com/images/resortmaps/238.jpg" }],
     spots: [
       { name: "1923 Prohibition Bar", type: "Bourbon Bar 🥃", desc: "The best dedicated whiskey bar on the strip. Named for Prohibition's end. Deep bourbon program, serious staff, beautiful space. Do not miss." },
       { name: "Rosina Bar", type: "Bar 🍸", desc: "Intimate, hidden cocktail bar inside the Venetian. One of the most underrated bars on the strip. Exceptional craft program." },
@@ -625,6 +634,7 @@ const hotels = [
   },
   {
     name: "Harrah's", emoji: "🎪",
+    mapUrls: [{ label: "🗺️ Hotel Map", url: "https://www.smartervegas.com/images/resortmaps/226.jpg" }],
     spots: [
       { name: "Carnaval Court", type: "Outdoor Bar 🎶", desc: "Open-air bar on the strip sidewalk. Flair bartenders, live music, energetic crowd. Great for a mid-walk stop — zero pretension." },
       { name: "Piano Bar", type: "Bar 🎹", desc: "Harrah's dueling piano bar. Similar vibe to Times Square Bar at NYNY but slightly more intimate. Lively on weekends." }
@@ -632,6 +642,7 @@ const hotels = [
   },
   {
     name: "LINQ", emoji: "🎡",
+    mapUrls: [{ label: "🗺️ Hotel Map", url: "https://www.smartervegas.com/images/resortmaps/229.jpg" }],
     spots: [
       { name: "High Roller Observation Wheel", type: "Must-Do 🎡", desc: "Book the open bar gondola. 30 min, 550 feet, full strip panorama. Surprisingly good time — do it at night." },
       { name: "LINQ Promenade", type: "Bar District 🍹", desc: "Outdoor pedestrian bar district. Multiple bars, casual food, great energy. Good midday or early evening stop." }
@@ -639,6 +650,10 @@ const hotels = [
   },
   {
     name: "Flamingo / Horseshoe", emoji: "🦩",
+    mapUrls: [
+      { label: "🗺️ Flamingo Map", url: "https://www.smartervegas.com/images/resortmaps/225.jpg" },
+      { label: "🗺️ Horseshoe Map", url: "https://www.smartervegas.com/images/resortmaps/232.jpg" }
+    ],
     spots: [
       { name: "The Count Room", type: "Speakeasy 🔐", desc: "Hidden speakeasy inside the Flamingo. Intimate, well-executed, strong cocktail program. Pair with The Lock on a dedicated speakeasy night." },
       { name: "The Lock Speakeasy", type: "Speakeasy 🔒", desc: "Hidden inside Horseshoe Las Vegas (former Bally's, next to Flamingo). One of the better speakeasy concepts on the strip. Reserve ahead." },
@@ -647,6 +662,7 @@ const hotels = [
   },
   {
     name: "Caesars Palace", emoji: "🏛️",
+    mapUrls: [{ label: "🗺️ Hotel Map", url: "https://www.smartervegas.com/images/resortmaps/228.jpg" }],
     spots: [
       { name: "Caesars Race & Sports Book", type: "Sportsbook 🏀", desc: "Best on-strip sportsbook. VIP seating pods, massive screens, full bar and food service. The March Madness move if you're staying on the strip." },
       { name: "Montecristo Cigar Bar", type: "Cigar Bar 🥃", desc: "Full cigar lounge with a deep bourbon and whiskey selection. If you're smokers, this is the one. Even if not, worth a look." },
@@ -656,6 +672,7 @@ const hotels = [
   },
   {
     name: "Bellagio", emoji: "⛲",
+    mapUrls: [{ label: "🗺️ Hotel Map", url: "https://www.smartervegas.com/images/resortmaps/221.jpg" }],
     spots: [
       { name: "Petrossian Bar", type: "Bar 🎩", desc: "The classiest bar on the strip. Direct fountain views, refined service, excellent bourbon selection. Classic Vegas." },
       { name: "Bellagio Fountains", type: "Must-See 🌊", desc: "Every 15–30 min at night. Watch from the sidewalk or from inside Petrossian. Non-negotiable." },
@@ -665,6 +682,7 @@ const hotels = [
   },
   {
     name: "Paris Las Vegas", emoji: "🗼",
+    mapUrls: [{ label: "🗺️ Hotel Map", url: "https://www.smartervegas.com/images/resortmaps/235.jpg" }],
     spots: [
       { name: "Mon Ami Gabi", type: "Bar / Restaurant 🥂", desc: "Sidewalk patio with direct Bellagio fountain views. Best outdoor strip seating in Vegas. Strong brunch option Saturday." },
       { name: "Chateau Rooftop", type: "Rooftop Bar 🌆", desc: "At the base of the Eiffel Tower replica. Great views and atmosphere at night." },
@@ -673,12 +691,14 @@ const hotels = [
   },
   {
     name: "Planet Hollywood", emoji: "🎬",
+    mapUrls: [{ label: "🗺️ Hotel Map", url: "https://www.smartervegas.com/images/resortmaps/234.jpg" }],
     spots: [
       { name: "Speakeasy at Caramella's", type: "Speakeasy 🔐", desc: "Hidden speakeasy inside Planet Hollywood. Lower profile than The Vault or The Lock, but worth a stop on a speakeasy crawl night." }
     ]
   },
   {
     name: "Cosmopolitan", emoji: "✨",
+    mapUrls: [{ label: "🗺️ Hotel Map", url: "https://www.smartervegas.com/images/resortmaps/258.jpg" }],
     spots: [
       { name: "The Chandelier — Level 2", type: "Bar ⭐", desc: "The sweet spot. Order the Verbena. Iconic Vegas cocktail experience — start and end here often." },
       { name: "The Chandelier — Level 1 & 3", type: "Bar 🍸", desc: "Level 1 is walk-through on the casino floor. Level 3 is the quietest and most intimate. Worth seeing all three." },
@@ -691,6 +711,7 @@ const hotels = [
   },
   {
     name: "Aria", emoji: "🔷",
+    mapUrls: [{ label: "🗺️ Hotel Map", url: "https://www.smartervegas.com/images/resortmaps/220.jpg" }],
     spots: [
       { name: "Alibi Cocktail Lounge", type: "Bar 🍸", desc: "Sophisticated open bar inside Aria's casino floor. Premium spirits, well-crafted cocktails. Surprisingly uncrowded for a casino bar." },
       { name: "Lobby Bar", type: "Bar 🥂", desc: "One of the most beautiful lobbies on the strip. Good for a quiet pour and people-watching." }
@@ -698,6 +719,7 @@ const hotels = [
   },
   {
     name: "Park MGM", emoji: "🌿",
+    mapUrls: [{ label: "🗺️ Hotel Map", url: "https://www.smartervegas.com/images/resortmaps/239.jpg" }],
     spots: [
       { name: "On The Record", type: "Speakeasy 🎵", desc: "Hidden speakeasy with vinyl rooms, neon, and craft cocktails. One of the most creative bar concepts on the strip. Pairs well with a Cosmo night." },
       { name: "Juniper Cocktail Lounge", type: "Bar 🍸", desc: "Intimate, beautifully designed. Quieter crowd, excellent cocktails. Good for real conversation." }
@@ -705,6 +727,7 @@ const hotels = [
   },
   {
     name: "New York-New York", emoji: "🗽",
+    mapUrls: [{ label: "🗺️ Hotel Map", url: "https://www.smartervegas.com/images/resortmaps/231.jpg" }],
     spots: [
       { name: "Bar at Times Square", type: "Bar 🎹", desc: "Dueling pianos nightly. Rowdy, fun, zero pretension. Great palette cleanser between upscale stops." },
       { name: "Nine Fine Irishmen", type: "Irish Pub 🍺", desc: "Authentic imported Irish pub. Solid whiskey selection, live music most nights." }
@@ -712,6 +735,7 @@ const hotels = [
   },
   {
     name: "MGM Grand", emoji: "🦁",
+    mapUrls: [{ label: "🗺️ Hotel Map", url: "https://www.smartervegas.com/images/resortmaps/230.jpg" }],
     spots: [
       { name: "Whiskey Down", type: "Bourbon Bar 🥃", desc: "Retro cocktail lounge with a serious American whiskey and bourbon program. Great for an unhurried pour, solid staff." },
       { name: "BetMGM Sports Lounge", type: "Sportsbook 🏀", desc: "Spacious and comfortable sportsbook. Integrates with the BetMGM app seamlessly. Steps from Whiskey Down — combine the two on a game day." }
@@ -719,6 +743,7 @@ const hotels = [
   },
   {
     name: "Mandalay Bay / Delano", emoji: "🌴",
+    mapUrls: [{ label: "🗺️ Hotel Map", url: "https://www.smartervegas.com/images/resortmaps/227.jpg" }],
     spots: [
       { name: "1923 Bourbon Bar", type: "Bourbon Bar 🥃", desc: "Dedicated bourbon and American whiskey bar. Named for the year Prohibition ended. Serious selection, proper glassware, knowledgeable staff. Worth the Uber south." },
       { name: "Skyfall Lounge", type: "Rooftop Bar 🌅", desc: "64th floor of the Delano tower. Best unobstructed strip views in Vegas. Arrive before sunset — it earns the trip." },
@@ -791,6 +816,15 @@ function buildHotels() {
 
     const spotsDiv = document.createElement('div');
     spotsDiv.className = 'hotel-spots';
+
+    if (hotel.mapUrls && hotel.mapUrls.length > 0) {
+      const mapRow = document.createElement('div');
+      mapRow.className = 'spot-row hotel-map-row';
+      mapRow.innerHTML = hotel.mapUrls.map(m =>
+        `<a href="${m.url}" target="_blank" rel="noopener" class="hotel-map-link">${m.label}</a>`
+      ).join('');
+      spotsDiv.appendChild(mapRow);
+    }
 
     hotel.spots.forEach(spot => {
       const row = document.createElement('div');
